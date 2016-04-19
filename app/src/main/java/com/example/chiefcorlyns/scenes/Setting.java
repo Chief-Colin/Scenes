@@ -97,6 +97,8 @@ public class Setting extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
+
+
         } else if (id == R.id.nav_gallery) {
             SecondFragment fragment = new SecondFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =

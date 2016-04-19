@@ -49,8 +49,5 @@ public class FirstFragment extends Fragment  {
         return inflater.inflate(R.layout.fragment_first, container, false);
 
     }
-
-    public void test4421(){
-        String a = "just to see if push works";
-    }
+    
 }

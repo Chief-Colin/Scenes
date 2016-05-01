@@ -1,5 +1,6 @@
 package com.example.chiefcorlyns.scenes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -97,9 +98,10 @@ public class Setting extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
+        }
 
 
-        } else if (id == R.id.nav_gallery) {
+        else if (id == R.id.nav_gallery) {
             SecondFragment fragment = new SecondFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
@@ -108,7 +110,14 @@ public class Setting extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
+            Intent i = new Intent(Setting.this, JoystickFragment.class);
+            startActivity(i);
+
         } else if (id == R.id.nav_manage) {
+
+            Intent i = new Intent(Setting.this, TiltControl.class);
+            startActivity(i);;
+
 
         } else if (id == R.id.nav_share) {
 

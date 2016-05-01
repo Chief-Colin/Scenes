@@ -1,12 +1,18 @@
 package com.example.chiefcorlyns.scenes;
 
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -18,6 +24,9 @@ import java.io.IOException;
 public class SecondFragment extends Fragment {
 
     View view;
+    TextView powerTextView;
+    Vibrator vibrator;
+    MediaPlayer dangerWarning;
 
 
 
@@ -36,16 +45,33 @@ public class SecondFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_second, container, false);
 
 
+        WebView wv = (WebView) view.findViewById(R.id.webview);
+        WebSettings webSettings = wv.getSettings();
+
+        // myWebView.setWebViewClient(new webView());
+        webSettings.setJavaScriptEnabled(true);
+        wv.loadUrl("http://www.onedirectionmusic.com/ie/home/");
+
         Button Foward = (Button) view.findViewById(R.id.btForward);
         Button Reverse = (Button) view.findViewById(R.id.btReverse);
         Button Right = (Button) view.findViewById(R.id.btRight);
         Button Left = (Button) view.findViewById(R.id.btLeft);
         Button Stop = (Button) view.findViewById(R.id.btStop);
 
+        powerTextView = (TextView) view.findViewById(R.id.powerTextView);
+        dangerWarning = MediaPlayer.create(getContext(), R.raw.warning);
+        vibrator = (Vibrator)getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+        //utrasonicSensor();
+
+
         Foward.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
                     sendForward(v);
+                    utrasonicSensor();
+
+
 
 
                 } catch (IOException ex) {
@@ -68,6 +94,7 @@ public class SecondFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     sendRight(v);
+                    utrasonicSensor();
 
                 } catch (IOException ex) {
                 }
@@ -78,6 +105,7 @@ public class SecondFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     sendLeft(v);
+                    utrasonicSensor();
 
                 } catch (IOException ex) {
                 }
@@ -106,7 +134,7 @@ public class SecondFragment extends Fragment {
 
                 String msg = setForward();
                 msg += "\n";
-                FirstFragment.mmOutputStream.write(msg.getBytes());
+                PairedDevices.mmOutputStream.write(msg.getBytes());
                 //myLabel.setText("Data Sent");
                 break;
         }
@@ -117,7 +145,7 @@ public class SecondFragment extends Fragment {
             case R.id.btReverse:
                 String msg = setReverse();
                 msg += "\n";
-                FirstFragment.mmOutputStream.write(msg.getBytes());
+                PairedDevices.mmOutputStream.write(msg.getBytes());
                 //  myLabel.setText("Data Sent");
 
                 break;
@@ -129,7 +157,7 @@ public class SecondFragment extends Fragment {
             case R.id.btLeft:
                 String msg = setLeft();
                 msg += "\n";
-                FirstFragment.mmOutputStream.write(msg.getBytes());
+                PairedDevices.mmOutputStream.write(msg.getBytes());
                 // myLabel.setText("left turn");
 
                 break;
@@ -143,7 +171,7 @@ public class SecondFragment extends Fragment {
             case R.id.btRight:
                 String msg = setRight();
                 msg += "\n";
-                FirstFragment.mmOutputStream.write(msg.getBytes());
+                PairedDevices.mmOutputStream.write(msg.getBytes());
                 //  myLabel.setText("Data Sent");
 
                 break;
@@ -157,13 +185,39 @@ public class SecondFragment extends Fragment {
             case R.id.btStop:
                 String msg = setStop();
                 msg += "\n";
-                FirstFragment.mmOutputStream.write(msg.getBytes());
+                PairedDevices.mmOutputStream.write(msg.getBytes());
                 //  myLabel.setText("Data Sent");
 
                 break;
 
         }
     }
+
+    void utrasonicSensor() {
+
+
+        String m = null;
+        try {
+            m = String.valueOf(PairedDevices.mmInputStream.read());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        powerTextView.setText(" Ultrasonic "+m);
+        int range = Integer.parseInt(m);
+
+               if (range<40){
+
+                   dangerWarning.start();
+                   //long [] pattern ={250, 500};
+                   vibrator.vibrate(1000);
+               }
+
+
+    }
+
+
+
 
 
 

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#500606"
+    tools:context=".ButtonFragment">
+
+    <RelativeLayout
+        android:background="#500606"
+        android:id="@+id/nonVideoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.example.chiefcorlyns.scenes.VideoEnabledWebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <!-- View where the video will be shown when video goes fullscreen -->
+    <RelativeLayout
+
+        android:id="@+id/videoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        a "Loading..." message. However, in this particular example this view is actually defined in
+        view_loading_video.xml and inflated programmatically in ExampleActivity.java. The reason for
+        this is to keep the main layout (this file) cleaner. -->
+        <!-- <View
+            android:id="@+id/videoLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" /> -->
+
+
+        <RelativeLayout
+            android:id="@+id/ButtonView"
+            android:layout_width="wrap_content"
+            android:layout_height="210dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+
+            android:layout_alignParentTop="true">
+
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Range = "
+                android:background="#080505"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:id="@+id/tvRange1"
+                android:layout_below="@+id/tvRange2"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_marginTop="60dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="#050404"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:text="Save Route"
+                android:id="@+id/btSaveRoute"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Range = "
+                android:background="#030202"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:id="@+id/tvRange2"
+                android:layout_below="@+id/btSaveRoute"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="1dp" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btLeft"
+                android:textColor="#FFF"
+                android:text="LT"
+                android:textStyle="bold"
+                android:background="@drawable/left1"
+                android:layout_above="@+id/btReverse"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/btForward" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Timer = "
+                android:textSize="10dp"
+                android:background="#080505"
+                android:textColor="#cc1010"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/tvTimer"
+                android:layout_alignTop="@+id/btForward"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:textColor="#FFF"
+                android:text="RW"
+                android:textStyle="bold"
+                android:background="@drawable/reverse"
+                android:id="@+id/btReverse"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/btLeft" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="Stop"
+                android:id="@+id/btStop"
+                android:textColor="#FFF"
+                android:background="#0e0d0d"
+                android:layout_above="@+id/btReverse"
+                android:layout_toEndOf="@+id/btLeft" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/right"
+                android:id="@+id/btRight"
+                android:allowUndo="true"
+                android:textColor="#FFF"
+                android:text="RT"
+                android:textStyle="bold"
+                android:layout_above="@+id/btReverse"
+                android:layout_toEndOf="@+id/btStop"
+                android:layout_below="@+id/btForward" />
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/forward"
+                android:id="@+id/btForward"
+                android:textColor="#FFF"
+                android:text="FW"
+                android:textStyle="bold"
+                android:layout_above="@+id/btStop"
+                android:layout_toEndOf="@+id/btLeft" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+
+
+

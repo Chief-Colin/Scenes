@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+        tools:context="com.example.chiefcorlyns.JoystickFragment"
+        android:background="@drawable/car1"
+        android:longClickable="false"
+        android:screenOrientation="landscape"
+    >
+
+    <RelativeLayout
+        android:id="@+id/nonVideoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.example.chiefcorlyns.scenes.VideoEnabledWebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <!-- View where the video will be shown when video goes fullscreen -->
+    <RelativeLayout
+        android:id="@+id/videoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <!-- View that will be shown while the fullscreen video loads. For example you could include
+        a "Loading..." message. However, in this particular example this view is actually defined in
+        view_loading_video.xml and inflated programmatically in ExampleActivity.java. The reason for
+        this is to keep the main layout (this file) cleaner. -->
+        <!-- <View
+            android:id="@+id/videoLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" /> -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/moveLabel"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="144dp" />
+    </RelativeLayout>
+
+
+    <com.example.chiefcorlyns.scenes.JoystickView
+
+        com.example.chiefcorlyns.scenes.JoystickView=".com.example.chiefcorlyns.scenes.JoystickView"
+        android:id="@+id/joystickView"
+        android:layout_height="180dp"
+        android:layout_width="180dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+
+    </com.example.chiefcorlyns.scenes.JoystickView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:id="@+id/angleTextView"
+        android:text="A="
+        android:background="#212121"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/forwardButton"
+        android:layout_toEndOf="@+id/forwardButton" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="P="
+        android:background="#212121"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:id="@+id/tvRange1"
+        android:layout_below="@+id/angleTextView"
+        android:layout_alignLeft="@+id/angleTextView"
+        android:layout_alignStart="@+id/angleTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dir="
+        android:background="#212121"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:id="@+id/directionTextView"
+        android:layout_below="@+id/tvRange1"
+        android:layout_alignLeft="@+id/tvRange1"
+        android:layout_alignStart="@+id/tvRange1" />
+
+
+
+
+</RelativeLayout>

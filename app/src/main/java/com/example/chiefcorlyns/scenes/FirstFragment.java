@@ -5,11 +5,13 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +33,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
+
+import static android.support.v7.app.AlertDialog.Builder;
 
 
 /**
@@ -46,6 +51,9 @@ public class FirstFragment extends Fragment {
     int readBufferPosition;
     int counter;
 
+
+    NavigationView navigationView = null;
+    Toolbar toolbar = null;
     public Set<BluetoothDevice> pairedDevices;
 
 
@@ -54,6 +62,7 @@ public class FirstFragment extends Fragment {
     public static BluetoothAdapter myBluetooth = null;
     public static BluetoothSocket btSocket = null;
     public static boolean isBtConnected = false;
+    public static String ipAddress;
     //SPP UUID. Look for it
 
 
@@ -65,11 +74,14 @@ public class FirstFragment extends Fragment {
 
     volatile boolean stopWorker;
     Button openButton;
+    Button ipButton;
+    EditText ipText;
     View view;
     ImageView imageview;
 
 
-    public FirstFragment() {
+
+     public FirstFragment() {
         // Required empty public constructor
     }
 
@@ -77,24 +89,22 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         view = inflater.inflate(R.layout.fragment_first, container, false);
-
 
         //startAnimation();
         openButton = (Button) view.findViewById(R.id.btBluetooth);
         imageview = (ImageView) view.findViewById(R.id.car1);
         devicelist = (ListView) view.findViewById(R.id.listView);
 
-        btnPaired = (Button)view.findViewById(R.id.button);
-        devicelist = (ListView)view.findViewById(R.id.listView);
+        btnPaired = (Button) view.findViewById(R.id.button);
+        devicelist = (ListView) view.findViewById(R.id.listView);
+        ipText = (EditText) view.findViewById(R.id.txtIP);
+        ipButton = (Button) view.findViewById(R.id.enterIP);
 
         //if the device has bluetooth
 
-
-        final Animation animate = AnimationUtils.loadAnimation(getContext(), R.anim.animate);
+        final Animation animate = AnimationUtils.loadAnimation(getActivity(), R.anim.animate);
         imageview.startAnimation(animate);
 
         animate.setAnimationListener(new Animation.AnimationListener() {
@@ -123,7 +133,7 @@ public class FirstFragment extends Fragment {
 
         if (myBluetooth == null) {
             //Show a mensag. that the device has no bluetooth adapter
-            Toast.makeText(getContext(), "Bluetooth Device Not Available", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Bluetooth Device Not Available", Toast.LENGTH_LONG).show();
 
             //finish apk
             //finish();
@@ -142,7 +152,7 @@ public class FirstFragment extends Fragment {
 
         return view;
     }
-
+   // @Override
     private void pairedDevicesList() {
         pairedDevices = myBluetooth.getBondedDevices();
         ArrayList list = new ArrayList();
@@ -152,38 +162,56 @@ public class FirstFragment extends Fragment {
                 list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
             }
         } else {
-            Toast.makeText(getContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
         }
 
-        final ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); //Method called when the device from the list is clicked
 
     }
 
+
     private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+
             // Get the device MAC address, the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
+
+
             // Make an intent to start next activity.
             UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
+
+
             try {
                 myBluetooth = BluetoothAdapter.getDefaultAdapter();//
                 mmDevice = myBluetooth.getRemoteDevice(address);
-                btSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-                btSocket.connect();
-                mmOutputStream = btSocket.getOutputStream();
-                mmInputStream = btSocket.getInputStream();
+
+                    btSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+
+
+                    btSocket.connect();
+                    mmOutputStream = btSocket.getOutputStream();
+                    mmInputStream = btSocket.getInputStream();
+
+
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
+                if (btSocket.isConnected()==false){
 
-            beginListenForData();
 
-            //myLabel.setText("Bluetooth Opened");
+                        Toast.makeText(getActivity(), " Devices Not Found.", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+
+                        beginListenForData();
+
+
+                    }  //myLabel.setText("Bluetooth Opened");
         }
 
         void beginListenForData() {
@@ -225,22 +253,46 @@ public class FirstFragment extends Fragment {
                     }
                 }
             });
+             //getMenuInflater().inflate(R.menu.setting, menu);
+            openDialog();
 
-            FirstFragment fragment = new FirstFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.commit();
         }
     };
 
-        void findBT() {
-            PairedDevices fragment = new PairedDevices();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.commit();
+    public void openDialog() {
+        Builder builder = new Builder(getContext());
+        builder.setTitle("Cobra Mc");
+
+        View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.ip_popup, (ViewGroup) getView(), false);
+        // Set up the input
+        final EditText input = (EditText) viewInflated.findViewById(R.id.txtIP);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        builder.setView(viewInflated);
+
+        // Set up the buttons
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int num) {
+                dialog.dismiss();
+                ipAddress = input.getText().toString();
+
+                }
+
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int num) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+
         }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -255,7 +307,57 @@ public class FirstFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,11 +1,12 @@
 package com.example.chiefcorlyns.scenes;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,12 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class Setting extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
+    JoystickFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,7 @@ public class Setting extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
+
 
          toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,6 +56,18 @@ public class Setting extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        if(fragment!=null && fragment.isResumed()){
+            //do nothing here if we're showing the fragment
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else{
+            //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); // otherwise lock in portrait
+        }
+        super.onConfigurationChanged(newConfig);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -102,7 +118,7 @@ public class Setting extends AppCompatActivity
 
 
         else if (id == R.id.nav_gallery) {
-            SecondFragment fragment = new SecondFragment();
+            ButtonFragment fragment = new ButtonFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -110,16 +126,19 @@ public class Setting extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-            Intent i = new Intent(Setting.this, JoystickFragment.class);
-            startActivity(i);
-
+            JoystickFragment fragment = new JoystickFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_manage) {
 
             Intent i = new Intent(Setting.this, TiltControl.class);
-            startActivity(i);;
+            startActivity(i);
 
 
         } else if (id == R.id.nav_share) {
+
 
         } else if (id == R.id.nav_send) {
 

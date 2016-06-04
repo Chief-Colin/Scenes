@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.chiefcorlyns.scene.FirstFragment">
 
     <include layout="@layout/content_paired_devices"
@@ -24,14 +20,13 @@
         android:layout_alignStart="@+id/btBluetooth" />
 
 
-
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Connect Bluetooth"
         android:id="@+id/btBluetooth"
-        android:background="#ad0404"
-        android:textColor="#FFF"
+        android:background="#212121"
+        android:textColor="#930906"
         android:textStyle="bold"
         android:layout_alignTop="@+id/imageView"
         android:layout_alignParentStart="true" />

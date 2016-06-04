@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Group12"
         android:textSize="14sp"
-        android:textColor="#FFF"
+        android:textColor="#050400"
         android:textStyle="bold"
         android:gravity="left"
         android:paddingBottom="4dp"
